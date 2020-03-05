@@ -1,0 +1,49 @@
+{% if status is not defined %}
+     <div class="creer_films">
+          <form action="creer_film" method="POST">
+               <label for="title">Titre :</label><input class="form-control" type="text" name="title" id="title"><br>
+               
+               <label for="nom_acteur">Nom de l'acteur :</label><input class="form-control" type="text" name="nom_acteur" id="nom_acteur"><br>
+                   <div id="new_nom"></div>
+          </form>
+                    <button name="add_nom" onclick="addNom()" class="btn btn-success">Ajouter un nom</button>
+                    <button name="remove_nom" onclick="removeNom()" class="btn btn-danger">Retirer un nom</button>
+                    <input type="hidden" value="1" id="total_nom"><br><br>
+
+          <form action="creer_film" method="POST">
+               <label for="prenom_acteur">Prenom de l'acteur :</label><input class="form-control" type="text" name="prenom_acteur" id="prenom_acteur"><br>
+                   <div id="new_prenom"></div>
+          </form>
+                    <button name="add_prenom" onclick="addPrenom()" class="btn btn-success">Aouter un prenom</button>
+                    <button name="remove_prenom" onclick="removePrenom()" class="btn btn-danger">Retirer un prenom</button>
+                    <input type="hidden" value="1" id="total_prenom"><br><br>
+          
+          <form action="creer_film" method="POST">
+               <label for="role">Rôle :</label><input class="form-control" type="text" name="role" id="role"><br>
+                    <div id="new_role"></div>
+          </form>   
+                    <button name="add_role" onclick="addRole()" class="btn btn-success">Aouter un role</button>
+                    <button name="remove_role" onclick="removeRole()" class="btn btn-danger">Retirer un role</button>
+                    <input type="hidden" value="1" id="total_role"><br><br>
+
+          <form action="creer_film" method="POST">
+              <label for="affiche">Affiche (adresse URL internet) :</label><input class="form-control" type="text" name="affiche" id="affiche"><br>
+               <input type="submit" value="OK">
+          </form>
+     </div>
+
+
+
+
+
+{% else %}
+
+     <div>
+     <p>{{status}}</p>
+          {% if film is defined %}
+               {{film.get_title}}
+               {{film.get_nomacteur}}
+          {% endif %}
+     </div>
+
+{% endif %}

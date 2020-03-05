@@ -1,0 +1,54 @@
+<div class="container d-flex justify-content-center">
+	<div id="carouselExampleIndicators" class="carousel slide" style="width: 500px; " data-ride="carousel">
+		<ol class="carousel-indicators">
+
+
+			{% if error is defined %}
+				{{error}}
+			{% endif %}
+
+
+			{% if oneFilm is not defined %}
+				{% for film in allFilms %}
+					<li data-target="#carouselExampleIndicators" data-slide-to="{{loop.index}}" {% if loop.index == 1 %} class="active">
+					{% endif %}
+				</li>
+			{% endfor %}
+		{% endif %}
+	</ol>
+
+	<div class="carousel-inner">
+
+		{% for film in allFilms %}
+
+			<div class="carousel-item {% if loop.index == 1 %} active  {% endif %}">
+				<h2>{{film.get_titre}}
+					({{film.get_année}})</h2>
+				<img src="{{film.get_affiche}}" class="d-flex justify-content-center w-100 h-60" alt="...">
+				<div class="carousel-caption d-none d-md-block">
+
+					<h4>{{film.get_realisateur}}</h4>
+
+					{% for role in film.get_roles %}
+						<h5>{{role.get_acteur.get_prenom}}
+							{{role.get_acteur.get_nom}}
+							({{role.get_personnage}})</h5>
+					{% endfor %}
+				</div>
+
+			</div>
+		{% endfor %}
+	</div>
+
+</div></div>{% if oneFilm is not defined %}
+{% if error is not defined %}
+	<br><div class="carousel-scroll d-flex justify-content-center">
+		<a class="carousel-control-left" href="#carouselExampleIndicators" role="button" data-slide="prev">
+			<button type="button" class="btn btn-primary">Precedent</button>
+		</a>
+		<span>
+			&nbsp;	&nbsp;	&nbsp;</span>
+		<a class="carousel-control-right" href="#carouselExampleIndicators" role="button" data-slide="next"></span>
+		<button type="button" class="btn btn-primary">Suivant</button>
+	</a>
+</div>{% endif %}{% endif %}</div>
