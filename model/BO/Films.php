@@ -14,21 +14,25 @@
 class Films
 {
 
-    private $_idfilm;
+
+    private $_idFilm;
     private $_titre;
     private $_realisateur;
+    private $_annee;
     private $_affiche;
-    private $_année;
     private $_roles = array();
 
-
-    public function __construct(int $_idfilm, string $_titre, string $_realisateur, string $_affiche, int $_année)
+    public function __construct(array $films)
     {
-        $this->set_idfilm($_idfilm);
-        $this->set_titre($_titre);
-        $this->set_realisateur($_realisateur);
-        $this->set_affiche($_affiche);
-        $this->set_année($_année);
+        if (isset($films['idFilm'])) {
+            $this->set_idFilm($films['idFilm']);
+        }
+        
+        $this->set_titre($films['titre']);
+        $this->set_realisateur($films['realisateur']);
+        $this->set_affiche($films['affiche']);
+        $this->set_année($films['annee']);
+        
     }
 
     public function get_titre()

@@ -1,4 +1,4 @@
-<div class="container d-flex justify-content-center">
+{# <div class="container d-flex justify-content-center">
 	<div id="carouselExampleIndicators" class="carousel slide" style="width: 500px; " data-ride="carousel">
 		<ol class="carousel-indicators">
 
@@ -51,4 +51,60 @@
 		<a class="carousel-control-right" href="#carouselExampleIndicators" role="button" data-slide="next"></span>
 		<button type="button" class="btn btn-primary">Suivant</button>
 	</a>
-</div>{% endif %}{% endif %}</div>
+</div>{% endif %}{% endif %}</div> #}
+
+<div class="container cadre-carou">
+	<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+		<ol class="carousel-indicators">
+			{% if error is defined %}
+				{{error}}
+			{% endif %}
+
+			{% if oneFilm is not defined %}
+				{% for film in allFilms %}
+					<li data-target="#carouselExampleIndicators" data-slide-to="{{loop.index}}" {% if loop.index == 1 %} class="active">
+					{% endif %}
+				</li>
+			{% endfor %}
+		{% endif %}
+	</ol>
+	<div class="container w-100 ">
+		<div class="carousel-inner ">
+			{% for film in allFilms %}
+				<div class="carousel-item {% if loop.index == 1 %} active {% endif %}  ">
+					<div class=" d-flex  ">
+
+
+						<div class="description-film">
+							<div class="real">
+								<h5>{{film.get_titre}}
+									({{film.get_année}})
+								</br>
+							</br>
+							{{film.get_realisateur}}
+						</h5>
+					</div>
+					{% for role in film.get_roles %}
+						{{role.get_acteur.get_prenom}}
+						{{role.get_acteur.get_nom}}
+						({{role.get_personnage}})
+					</br>
+				{% endfor %}
+			</div>
+
+			<div class=" w-50 ml-5" style="height: 600px">
+				<img src=" {{film.get_affiche}} " class="d-block w-100" style="height:600px" alt="...">
+			</div>
+		</div>
+	</div>
+{% endfor %}
+</div>
+</div>
+{# Bouton suivant et precedent #}
+<a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+<button type="button" class="btn btn-primary">Precedent</button>
+</a>
+<a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next"></span>
+<button type="button" class="btn btn-primary">Suivant</button>
+</a>
+</div></div>

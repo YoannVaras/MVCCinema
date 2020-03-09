@@ -18,13 +18,10 @@ class User
     private $_email;
     private $_password;
 
-    public function __construct(array $offres)
+    public function __construct(string $email, string $password)
     {
-        if (isset($offres['id'])) {
-            $this->set_iduser($offres['id']);
-        }
-        $this->set_email($offres['title']);
-        $this->set_password($offres['description']);
+        $this->set_email($email);
+        $this->set_password($password);
     }
 
     public function get_email()

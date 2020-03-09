@@ -1,59 +1,39 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Acteurs
- *
- * @author Yoann
- */
 class Role
 {
 
-    private $_personnage;
-    private $_idrole;
-    private $_test;
-    private $_acteur;
+    private $_idRole,
+            $_personnage, 
+            $_acteur;
 
-    public function __construct(int $idrole = null, string $personnage, Acteurs $acteur )
+
+    public function __construct(int $_idRole = null,string $_personnage, Acteurs $_acteur)
     {
-        $this->set_idrole($idrole);
-        $this->set_personnage($personnage);
-        $this->set_acteur($acteur);
+
+        $this->set_idRole($_idRole);
+        $this->set_personnage($_personnage);
+        $this->set_acteur($_acteur);
     }
 
     public function get_personnage()
     {
         return $this->_personnage;
     }
-    
+
     public function set_personnage($_personnage)
     {
         $this->_personnage = $_personnage;
     }
 
-    public function get_idrole()
+    public function get_idRole()
     {
-        return $this->_idrole;
+        return $this->_idRole;
     }
 
-    public function set_idrole($_idrole)
+    public function set_idRole($_idRole)
     {
-        $this->_idrole = $_idrole;
-    }
-        
-    public function get_test()
-    {
-        return $this->_test;
-    }
-
-    public function set_test($_test)
-    {
-        $this->_test = $_test;
+        $this->_idRole = $_idRole;
     }
 
     public function get_acteur()
@@ -61,9 +41,10 @@ class Role
         return $this->_acteur;
     }
 
-
     public function set_acteur($_acteur)
     {
         $this->_acteur = $_acteur;
+
+        return $this;
     }
 }

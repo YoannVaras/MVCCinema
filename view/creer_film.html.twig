@@ -1,49 +1,150 @@
-{% if status is not defined %}
-     <div class="creer_films">
-          <form action="creer_film" method="POST">
-               <label for="title">Titre :</label><input class="form-control" type="text" name="title" id="title"><br>
-               
-               <label for="nom_acteur">Nom de l'acteur :</label><input class="form-control" type="text" name="nom_acteur" id="nom_acteur"><br>
-                   <div id="new_nom"></div>
-          </form>
-                    <button name="add_nom" onclick="addNom()" class="btn btn-success">Ajouter un nom</button>
-                    <button name="remove_nom" onclick="removeNom()" class="btn btn-danger">Retirer un nom</button>
-                    <input type="hidden" value="1" id="total_nom"><br><br>
+{# {% if message is not defined %}
+	<div class="creer_films">
+		<form action="creer_film" method="POST">
+			<label for="title">Titre :</label><input class="form-control" type="text" name="title" id="title"><br>
 
-          <form action="creer_film" method="POST">
-               <label for="prenom_acteur">Prenom de l'acteur :</label><input class="form-control" type="text" name="prenom_acteur" id="prenom_acteur"><br>
-                   <div id="new_prenom"></div>
-          </form>
-                    <button name="add_prenom" onclick="addPrenom()" class="btn btn-success">Aouter un prenom</button>
-                    <button name="remove_prenom" onclick="removePrenom()" class="btn btn-danger">Retirer un prenom</button>
-                    <input type="hidden" value="1" id="total_prenom"><br><br>
-          
-          <form action="creer_film" method="POST">
-               <label for="role">Rôle :</label><input class="form-control" type="text" name="role" id="role"><br>
-                    <div id="new_role"></div>
-          </form>   
-                    <button name="add_role" onclick="addRole()" class="btn btn-success">Aouter un role</button>
-                    <button name="remove_role" onclick="removeRole()" class="btn btn-danger">Retirer un role</button>
-                    <input type="hidden" value="1" id="total_role"><br><br>
+			<label for="nom_acteur">Nom de l'acteur :</label><input class="form-control" type="text" name="nom_acteur" id="nom_acteur"><br>
+			<div id="new_nom"></div>
+		</form>
+		<button name="add_nom" onclick="addNom()" class="btn btn-success">Ajouter un nom</button>
+		<button name="remove_nom" onclick="removeNom()" class="btn btn-danger">Retirer un nom</button>
+		<input type="hidden" value="1" id="total_nom"><br><br>
 
-          <form action="creer_film" method="POST">
-              <label for="affiche">Affiche (adresse URL internet) :</label><input class="form-control" type="text" name="affiche" id="affiche"><br>
-               <input type="submit" value="OK">
-          </form>
-     </div>
+		<form action="creer_film" method="POST">
+			<label for="prenom_acteur">Prenom de l'acteur :</label><input class="form-control" type="text" name="prenom_acteur" id="prenom_acteur"><br>
+			<div id="new_prenom"></div>
+		</form>
+		<button name="add_prenom" onclick="addPrenom()" class="btn btn-success">Aouter un prenom</button>
+		<button name="remove_prenom" onclick="removePrenom()" class="btn btn-danger">Retirer un prenom</button>
+		<input type="hidden" value="1" id="total_prenom"><br><br>
 
+		<form action="creer_film" method="POST">
+			<label for="role">Rôle :</label><input class="form-control" type="text" name="role" id="role"><br>
+			<div id="new_role"></div>
+		</form>
+		<button name="add_role" onclick="addRole()" class="btn btn-success">Aouter un role</button>
+		<button name="remove_role" onclick="removeRole()" class="btn btn-danger">Retirer un role</button>
+		<input type="hidden" value="1" id="total_role"><br><br>
 
-
+		<form action="creer_film" method="POST">
+			<label for="affiche">Affiche (adresse URL internet) :</label><input class="form-control" type="text" name="affiche" id="affiche"><br>
+			<input type="submit" class="btn btn-success" value="Creer le film">
+		</form>
+	</div>
 
 
 {% else %}
 
-     <div>
-     <p>{{status}}</p>
-          {% if film is defined %}
-               {{film.get_title}}
-               {{film.get_nomacteur}}
-          {% endif %}
-     </div>
+	<div>
+		<p>{{message}}</p>
+		{% if film is defined %}
+			{{film.get_title}}
+			{{film.get_nomacteur}}
+		{% endif %}
+	</div>
 
-{% endif %}
+{% endif %} #}
+
+{# {% if session.login is  defined %} #}
+	<main>
+		<div class="container  col-6">
+			<div id="message" class="container col-6 ">
+				{% if errors is not empty %}
+					<div class="alert alert-danger col-12  mt-3">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span></button>
+						<p>Vous n'avez pas rempli le formulaire correctement</p>
+						<ul>
+							{% for error in errors %}
+								<li>{{error}}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+				{% if message is not empty %}
+					<div class="alert alert-success col-6 mt-3">
+						<p>{{message[0]}}
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</p>
+						</p>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+		<div class="container col-7">
+
+			<div id="formulaire" class="container col-12">
+
+				<h1>Ajouter un film</h1>
+
+				<form action="creer_film" method="POST">
+
+
+					<div class="form-group row">
+
+						<div class="col-6 ">
+							<label for="">Titre</label>
+							<input type="text" name="titre" class="form-control"/>
+						</div>
+						<div class="col-6 ">
+							<label for="">URL Affiche</label>
+							<input type="text" name="affiche" class="form-control"/>
+						</div>
+
+
+					</div>
+
+					<div class="form-group row ">
+
+						<div class="col-6 ">
+							<label for="">Réalisateur</label>
+							<input type="text" name="realisateur" class="form-control"/>
+						</div>
+						<div class="col-6 ">
+							<label for="">Année</label>
+							<input type="text" name="annee" class="form-control"/>
+						</div>
+
+					</div>
+					<div id="parent">
+						<div class="addRoleActeur col- 12 form-group row ">
+
+							<div class="col-6 ">
+								<label for="acteur">Acteur</label>
+								<div class="input-group mb-1">
+									<div class="input-group-prepend ">
+										<span id="ajouterActeur"
+										class="input-group-text ">
+											Nom
+										</span>
+									</div>
+									<input type="text" name="nom" class="form-control"/>
+									<div class="input-group-prepend ">
+										<span id="ajouterActeur" class="input-group-text ">Prénom</span>
+									</div>
+									<input type="text" name="prenom" class="form-control ">
+								</div>
+
+							</div>
+							<div class="col-6  ">
+								<label for="">Rôle</label>
+								<input type="text" name="role" class="form-control"/>
+							</div>
+						</div>
+
+
+					</div>
+
+					<div class="col-12 row justify-content-center">
+						<div id="btnActeur" class="btn btn-acteur rounded-pill btn-info ">ajouter un acteur</div>
+					</div>
+
+					<button class="btn btn-danger">Ajouter Film</button>
+
+				</form>
+			</div>
+		</div>
+	</main>
+{# {% endif %} #}
+

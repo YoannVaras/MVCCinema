@@ -18,7 +18,7 @@ class FilmsDAO extends Dao
     public function getAll($search)
     {
         //On définit la bdd pour la fonction
-        $films = array();
+
         $query = $this->_bdd->prepare("SELECT films.*,acteurs.*,role.* 
                                             FROM role 
                                             JOIN acteurs ON acteurs.idActeur = role.idActeur
@@ -26,16 +26,16 @@ class FilmsDAO extends Dao
                                             WHERE upper(films.titre) LIKE :search");
         $query->bindvalue(":search", "%".strtoupper($search)."%");
         $query->execute();
-
+        $films = array();
         $titreEnCours = '';
-        while ($data = $query->fetch()) 
-        {
-            if ($data['titre']!= $titreEnCours) 
-            {
-            $films[] = new Films ($data['idFilm'],$data['titre'],$data['realisateur'],$data['affiche'],$data['annee']);       
-            $titreEnCours = $data['titre'];
+        // On instancie chaque film
+        while ($film = $query->fetch()) {
+            if ($film['titre'] != $titreEnCours) {
+                $titreEnCours = $film['titre'];
+                $films[] = new Films($film);
             }
-            $films[count($films)-1]->addRole(new Role($data['idRole'],$data['personnage'],new Acteurs($data['idActeur'],$data['nom'],$data['prenom'])));
+            // On ajoute le tableau de roles pour chaque film
+            $films[count($films) - 1]->addRole(new Role(null, $film['personnage'], new Acteurs(null, $film['nom'], $film['prenom'])));
         }
         // echo '<pre>';
         // print_r($films);
@@ -43,21 +43,82 @@ class FilmsDAO extends Dao
         return ($films);
     }
 
-    //Ajouter une offre
-    public function add($data)
-    {
-
-        $valeurs = ['titre' => $data->get_titre(), 'nom' => $data->get_nom(), 'prenom' => $data->get_prenom(), 'personnage' => $data->get_personnage()];
-        $requete = 'INSERT INTO films (title, description) VALUES (:title , :description)';
-        $insert = $this->_bdd->prepare($requete);
-        if (!$insert->execute($valeurs)) {
-            //print_r($insert->errorInfo());
-            return false;
-        } else {
-            return true;
+        //Ajouter un film
+        public function add($film)
+        {
+    
+    
+            $values = ['titre' => $film->get_titre(), 'realisateur' => $film->get_realisateur(), 'affiche' => $film->get_affiche(), 'annee' => $film->get_année()];
+            // On verifie que le film n'existe pas en bdd
+            $query = $this->_bdd->prepare('SELECT * FROM films WHERE titre = :titre');
+            $query->execute(array(':titre' => ucfirst($values['titre'])));
+            $data = $query->fetch();
+            
+    
+    
+            if ($data == false) {
+    
+                $insert = 'INSERT INTO films (titre, realisateur, affiche, annee) VALUES (:titre , :realisateur,  :affiche, :annee)';
+                $query = $this->_bdd->prepare($insert);
+    
+                if (!$query->execute($values)) {
+                    return false;
+                } else {
+                    // recuperer id film pour inserer les roles
+                    $query = $this->_bdd->prepare('SELECT idFilm FROM films WHERE films.titre = :titre');
+                    
+                    $query->execute(array(':titre' => $film->get_titre()));
+                    $idFilm = $query->fetch();
+                    $idFilm = (int) $idFilm['idFilm'];
+    
+    
+    
+                    // On verifie que l'acteur n'existe pas en bdd si il existe on recupere son id
+                    $roles = $film->get_roles();
+                    foreach ($roles as $role) {
+                        
+                        $nom = $role->get_acteur()->get_nom();
+                        $prenom = $role->get_acteur()->get_prenom();
+                        
+                        
+                        $query = $this->_bdd->prepare('SELECT idActeur FROM acteurs WHERE nom = :nom AND prenom = :prenom');
+                        $query->bindParam(':nom', $nom);
+                        $query->bindParam(':prenom', $prenom);
+                        $query->execute();
+                        $idActeur = $query->fetch();
+                        if ($idActeur != false) {
+                        $idActeur = (int) $idActeur['idActeur'];
+                        } else {
+                            $insert = 'INSERT INTO acteurs (nom, prenom) VALUES (:nom,:prenom)';
+                            $query = $this->_bdd->prepare($insert);
+                            $query->execute(array(':nom' => $nom, ':prenom' => $prenom));
+                            $query = $this->_bdd->prepare('SELECT idActeur FROM acteurs WHERE nom = :nom AND prenom = :prenom');
+                            $query->bindParam(':nom', $nom);
+                            $query->bindParam(':prenom', $prenom);
+                            $query->execute();
+                            $idActeur = $query->fetch();
+                            $idActeur = (int) $idActeur['idActeur'];
+                        }
+    
+                        // on ajoute le role
+                        $personnage = $role->get_personnage();
+        
+                        $insert = 'INSERT INTO role (personnage,idActeur,idFilm) VALUES (:personnage, :idActeur, :idFilm) ';
+                        $query = $this->_bdd->prepare($insert);
+                        $query->bindParam(':personnage', $personnage);
+                        $query->bindParam(':idActeur', $idActeur);
+                        $query->bindParam(':idFilm', $idFilm);
+                        $query->execute();
+        
+                    }
+                    return true;
+                }
+            } else {
+                $erreur ='existe';
+                return $erreur;
+                
+            }
         }
-
-    }
 
     //Récupérer plus d'info sur 1 offre
     public function getOne($id_offer)
